@@ -47,7 +47,8 @@ public:
     TrafficLightPhase getCurrentPhase();
     // typical behaviour methods
     void simulate();
-    void waitForGreen();
+    
+    [[noreturn]] void waitForGreen();
 private:
     [[noreturn]] // typical behaviour methods
     void cycleThroughPhases();
