@@ -44,9 +44,11 @@ void createTrafficObjects_Paris(std::vector<std::shared_ptr<Street>> &streets, s
     // add vehicles to streets
     for (size_t nv = 0; nv < nVehicles; nv++)
     {
+        srand(nv);
+        int street_number=rand()%8;
         vehicles.push_back(std::make_shared<Vehicle>());
-        vehicles.at(nv)->setCurrentStreet(streets.at(nv));
-        vehicles.at(nv)->setCurrentDestination(intersections.at(8));
+        vehicles.at(nv)->setCurrentStreet(streets.at(street_number));
+        vehicles.at(nv)->setCurrentDestination(intersections.at(street_number));
     }
 }
 
@@ -102,9 +104,11 @@ void createTrafficObjects_NYC(std::vector<std::shared_ptr<Street>> &streets, std
     // add vehicles to streets
     for (size_t nv = 0; nv < nVehicles; nv++)
     {
+        srand(nv);
+        int street_number=rand()%6;
         vehicles.push_back(std::make_shared<Vehicle>());
-        vehicles.at(nv)->setCurrentStreet(streets.at(nv));
-        vehicles.at(nv)->setCurrentDestination(intersections.at(nv));
+        vehicles.at(nv)->setCurrentStreet(streets.at(street_number));
+        vehicles.at(nv)->setCurrentDestination(intersections.at(street_number));
     }
 }
 
@@ -118,9 +122,9 @@ int main()
     std::vector<std::shared_ptr<Intersection>> intersections;
     std::vector<std::shared_ptr<Vehicle>> vehicles;
     std::string backgroundImg;
-    int nVehicles = 6;
+    int nVehicles = 150;
     createTrafficObjects_Paris(streets, intersections, vehicles, backgroundImg, nVehicles);
-
+//    createTrafficObjects_NYC(streets, intersections, vehicles, backgroundImg, nVehicles);
     /* PART 2 : simulate traffic objects */
 
     // simulate intersection

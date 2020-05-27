@@ -73,19 +73,19 @@ void TrafficLight::cycleThroughPhases()
     std::cout << "TrafficLight #" << _id << "::cycleTroughPhases: thread id = " << std::this_thread::get_id() << std::endl;
     lck.unlock();
     std::chrono::time_point<std::chrono::system_clock> lastUpdate;
-    int cycleDuration =4+rand()%2;
+    int cycleDuration =4000+rand()%2000;
     lastUpdate = std::chrono::system_clock::now();
-    TrafficLightPhase currentPhase;
     while(true){
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        int timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - lastUpdate).count();
+        double timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastUpdate).count();
         if (timeSinceLastUpdate >= cycleDuration){
             if(_currentPhase==TrafficLightPhase::red){
-                currentPhase=TrafficLightPhase::green;
+                _currentPhase=TrafficLightPhase::green;
             }else{
-                currentPhase=TrafficLightPhase::red;
+                _currentPhase=TrafficLightPhase::red;
             }
-            _light_phase.send(std::move(currentPhase));
+            _light_phase.send(std::move(_currentPhase));
+            lastUpdate = std::chrono::system_clock::now();
         }
     }
 }

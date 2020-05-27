@@ -42,13 +42,12 @@ class TrafficLight:public TrafficObject
 public:
     // constructor / desctructor
     TrafficLight();
-    ~TrafficLight();
     // getters / setters
     TrafficLightPhase getCurrentPhase();
     // typical behaviour methods
-    void simulate();
+    void simulate() override;
     
-    [[noreturn]] void waitForGreen();
+    void waitForGreen();
 private:
     [[noreturn]] // typical behaviour methods
     void cycleThroughPhases();
