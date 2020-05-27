@@ -18,6 +18,9 @@ void MessageQueue<T>::send(T &&msg)
 {
     // FP.4a : The method send should use the mechanisms std::lock_guard<std::mutex> 
     // as well as _condition.notify_one() to add a new message to the queue and afterwards send a notification.
+    std::lock_guard<std::mutex> lck(_mtx);
+    _queue.push_back(std::move(msg));
+    _condition.notify_one();
 }
 
 
@@ -60,16 +63,18 @@ void TrafficLight::cycleThroughPhases()
     std::chrono::time_point<std::chrono::system_clock> lastUpdate;
     int cycleDuration =4+rand()%2;
     lastUpdate = std::chrono::system_clock::now();
+    TrafficLightPhase currentPhase;
     while(true){
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
         int timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - lastUpdate).count();
         if (timeSinceLastUpdate >= cycleDuration){
             if(_currentPhase==TrafficLightPhase::red){
-                _currentPhase=TrafficLightPhase::green;
+                currentPhase=TrafficLightPhase::green;
             }else{
-                _currentPhase=TrafficLightPhase::red;
+                currentPhase=TrafficLightPhase::red;
             }
-            
+            _currentPhase=currentPhase;
+            _light_phase.send(std::move(currentPhase));
         }
     }
 }
